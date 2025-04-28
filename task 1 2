@@ -1,0 +1,61 @@
+Task 1 2 
+
+Завдання 2* (опціональне). Пошук k-го найменшого елемента 
+
+from typing import List
+
+def quick_select(arr: List[int], k: int) -> int:
+    """
+    Повертає k-й найменший елемент у масиві arr.
+    Використовує підхід Quick Select (розділяй і володарюй).
+
+    Args:
+        arr: Несортований список чисел.
+        k: Позиція елемента за зростанням (1-based).
+
+    Returns:
+        Значення k-го найменшого елемента.
+
+    Середня складність: O(n).
+    """
+    if not 1 <= k <= len(arr):
+        raise ValueError("k має бути в діапазоні від 1 до довжини масиву")
+
+    pivot = arr[len(arr) // 2]
+    lows  = [x for x in arr if x < pivot]
+    highs = [x for x in arr if x > pivot]
+    pivots= [x for x in arr if x == pivot]
+
+    if k <= len(lows):
+        return quick_select(lows, k)
+    elif k <= len(lows) + len(pivots):
+        # k-й потрапляє в блок рівних pivot
+        return pivot
+    else:
+        # пропускаємо lows та pivots
+        return quick_select(highs, k - len(lows) - len(pivots))
+
+# Приклади тестів
+test_cases = [
+    ([3, 1, 4, 2, 5], 1),  # найменший
+    ([3, 1, 4, 2, 5], 3),  # середній
+    ([3, 1, 4, 2, 5], 5),  # найбільший
+    ([7, 10, 4, 3, 20, 15], 3),  # 3-й найменший серед [3,4,7,10,15,20] -> 7
+    ([5, 3, 1, 2, 2, 4], 4)  # повтори, 4-й найменший -> 2
+]
+
+for arr, k in test_cases:
+    result = quick_select(arr, k)
+    print(f"{k}-й найменший елемент в {arr} -> {result}")
+
+
+
+
+
+
+
+1-й найменший елемент в [3, 1, 4, 2, 5] -> 1
+3-й найменший елемент в [3, 1, 4, 2, 5] -> 3
+5-й найменший елемент в [3, 1, 4, 2, 5] -> 5
+3-й найменший елемент в [7, 10, 4, 3, 20, 15] -> 7
+4-й найменший елемент в [5, 3, 1, 2, 2, 4] -> 3
