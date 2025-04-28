@@ -1,0 +1,58 @@
+Task 1 1
+
+Завдання 1 (обов’язкове). Пошук максимального та мінімального елементів
+
+from typing import List, Tuple
+
+def find_min_max(arr: List[int]) -> Tuple[int, int]:
+    """
+    Знаходить мінімальний та максимальний елементи у масиві методом "розділяй і володарюй".
+
+    Args:
+        arr: Список чисел (довільної довжини, має містити принаймні один елемент)
+
+    Returns:
+        Кортеж (мінімум, максимум)
+
+    Складність: O(n)
+    """
+    if not arr:
+        raise ValueError("Масив має містити хоча б один елемент")
+
+    def helper(l: int, r: int) -> Tuple[int, int]:
+        # Якщо один елемент
+        if l == r:
+            return arr[l], arr[l]
+        # Якщо два елементи
+        if l + 1 == r:
+            return (arr[l], arr[r]) if arr[l] < arr[r] else (arr[r], arr[l])
+        # Розділяємо навпіл
+        mid = (l + r) // 2
+        min1, max1 = helper(l, mid)
+        min2, max2 = helper(mid + 1, r)
+        return (min1 if min1 < min2 else min2,
+                max1 if max1 > max2 else max2)
+
+    return helper(0, len(arr) - 1)
+
+# Приклади використання та результати
+test_arrays = [
+    [3, 1, 4, 2, 5],
+    [-10, 7, 0],
+    [42],
+    [5, 5, 5, 5]
+]
+
+for arr in test_arrays:
+    mn, mx = find_min_max(arr)
+    print(f"Масив: {arr} -> Мінімум: {mn}, Максимум: {mx}")
+
+
+
+
+
+
+Масив: [3, 1, 4, 2, 5] -> Мінімум: 1, Максимум: 5
+Масив: [-10, 7, 0] -> Мінімум: -10, Максимум: 7
+Масив: [42] -> Мінімум: 42, Максимум: 42
+Масив: [5, 5, 5, 5] -> Мінімум: 5, Максимум: 5
